@@ -123,14 +123,3 @@ def compile_phase_gadget(circ: Circuit) -> Circuit:
 
 # Define a CustomPass
 phase_gadget_hi_pass = CustomPass(compile_phase_gadget)
-
-# Try a testcase and check circuit unitary before and after HI compilation.
-testcase1 = get_phase_gadget(0.9, 2)
-u_before = testcase1.get_unitary()
-
-phase_gadget_hi_pass.apply(testcase1)
-u_after = testcase1.get_unitary()
-
-# print(compare_unitaries(u_before, u_after))
-
-# view_browser(testcase1)

@@ -38,7 +38,7 @@ def _create_pauli(letter: str) -> Pauli:
     return pauli_dict[letter]
 
 
-def get_pauli_gadget(pauli_word: str, angle: float):
+def get_pauli_gadget(pauli_word: str, angle: float) -> Circuit:
     """
     Returns a Pauli gadget circuit given a pauli word and an angle.
     """
@@ -109,33 +109,3 @@ def transform_pauli_gadget(circ: Circuit) -> Circuit:
 
 
 pauli_gadget_hi_pass = CustomPass(transform_pauli_gadget)
-
-
-def test_pauli_gen() -> None:
-    # test_pauli_circ = get_pauli_gadget("XYZX", 0.5)
-    # view_browser(test_pauli_circ)
-    # circuit_list = partition_pauli_gadget(test_pauli_circ)
-    # for circ in circuit_list:
-    #    view_browser(circ)
-    pauli_circ = get_pauli_gadget("ZZ", 0.9)
-    view_browser(pauli_circ)
-    u1 = pauli_circ.get_unitary()
-    pauli_gadget_hi_pass.apply(pauli_circ)
-    u2 = pauli_circ.get_unitary()
-    # view_browser(pauli_circ)
-    print(compare_unitaries(u1, u2))
-
-
-def compare_phase_and_pauli() -> None:
-    circ1 = get_phase_gadget(0.9, 2)
-    circ2 = get_pauli_gadget("ZZ", 0.9)
-    phase_gadget_hi_pass.apply(circ1)
-    pauli_gadget_hi_pass.apply(circ2)
-    view_browser(circ1)
-    view_browser(circ2)
-    print(compare_unitaries(circ1.get_unitary(), circ2.get_unitary()))
-    assert compare_unitaries(circ1.get_unitary(), circ2.get_unitary())
-
-
-compare_phase_and_pauli()
-# test_pauli_gen()
