@@ -13,7 +13,7 @@ from pytket.passes import (
     auto_squash_pass,
 )
 
-# from pytket.circuit.display import view_browser
+from pytket.circuit.display import view_browser
 
 hseries_rebase = auto_rebase_pass({OpType.ZZPhase, OpType.Rz, OpType.PhasedX})
 hseries_squash = auto_squash_pass({OpType.PhasedX, OpType.Rz})

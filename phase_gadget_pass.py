@@ -117,6 +117,7 @@ def compile_phase_gadget(circ: Circuit) -> Circuit:
     circ_prime.append(circuit_list[0])
     circ_prime.add_circuit(circuit_list[1], [circ_prime.qubits[-1]])
     circ_prime.append(circuit_list[2])
+
     return circ_prime
 
 
@@ -130,6 +131,6 @@ u_before = testcase1.get_unitary()
 phase_gadget_hi_pass.apply(testcase1)
 u_after = testcase1.get_unitary()
 
-print(compare_unitaries(u_before, u_after))
+# print(compare_unitaries(u_before, u_after))
 
-view_browser(testcase1)
+# view_browser(testcase1)
