@@ -1,3 +1,4 @@
+"""Script to apply the Hidden inverse technique to Phase gadget circuits."""
 from pytket.circuit import Circuit, OpType
 from pytket.circuit.display import view_browser
 from pytket.passes import CustomPass
@@ -103,7 +104,7 @@ def partition_phase_gadget(circ: Circuit) -> list[Circuit]:
 def compile_phase_gadget(circ: Circuit) -> Circuit:
     """
     Function that takes a phase gadget circuit and compiles the first
-    CNOT ladder with the standard CNOT decomposition and the second with the CNOT-dagger decomposition.
+    CNOT ladder with the standard CNOT decomposition and the second with the CNOT-dg decomposition.
     """
     circuit_list = partition_phase_gadget(circ)
 
