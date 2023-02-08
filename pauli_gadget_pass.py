@@ -68,23 +68,21 @@ def _partition_pauli_gadget(circ: Circuit) -> list[Circuit]:
     # )
     assert pauli_gadget_predicate.verify(circ)
 
-    circ1 = Circuit(n_qubits)
-    # TODO clean up this handling of Rz, its ugly
+    lhs_circ = Circuit(n_qubits)
     for cmd in circ.get_commands():
-        if cmd.op.type == OpType.Rz:
-            pass
-        else:
-            circ1.add_gate(cmd.op.type, cmd.op.params, cmd.qubits)
-        if cmd.op.type == OpType.Rz:
-            circuit_list.append(circ1)
-            circ2 = Circuit(1).add_gate(OpType.Rz, cmd.op.params, cmd.qubits)
-            circuit_list.append(circ2)
+        if cmd.op.type != OpType.Rz:
+            lhs_circ.add_gate(cmd.op.type, cmd.op.params, cmd.qubits)
+        elif cmd.op.type == OpType.Rz:
+            circuit_list.append(lhs_circ)
+            rz_index = cmd.qubits
+            rz_circ = Circuit(n_qubits).add_gate(OpType.Rz, cmd.op.params, rz_index)
+            circuit_list.append(rz_circ)
             break
 
-    circ3 = circ1.dagger()
-    circuit_list.append(circ3)
+    rhs_circ = lhs_circ.dagger()
+    circuit_list.append(rhs_circ)
 
-    assert len(circuit_list) == 3
+    # assert len(circuit_list) == 3
     return circuit_list
 
 
