@@ -104,10 +104,15 @@ def transform_pauli_gadget(circ: Circuit) -> Circuit:
     return circ_prime
 
 
-pauli_gadget_hi_pass = CustomPass(transform_pauli_gadget)
+single_pauli_gadget_hi_pass = CustomPass(transform_pauli_gadget)
 
 
 def transform_pauli_exp_box_circuit(circ: Circuit) -> Circuit:
+    """
+    Transform function: Given a circuit containing PauliExpBox(es)
+    and PhasePolyBox(es) returns a circuit with the Pauli gadgets
+    implemented using the H-Series hidden inverse decompositions.
+    """
     circ_prime = Circuit(circ.n_qubits, name=circ.name)
     for cmd in circ.get_commands():
         if cmd not in gadget_boxes:
@@ -116,7 +121,11 @@ def transform_pauli_exp_box_circuit(circ: Circuit) -> Circuit:
             box_circ = Circuit(len(cmd.qubits))
             box_circ.add_gate(cmd.op.type, cmd.op.params, cmd.qubits)
             DecomposeBoxes().apply(box_circ)
-            pauli_gadget_hi_pass.apply(box_circ)
-            circ_prime.append(box_circ)
+            # PauliSimp().apply(box_circ) ?
+            single_pauli_gadget_hi_pass.apply(box_circ)
+            circ_prime.add_circuit(box_circ, cmd.qubits)
 
     return circ_prime
+
+
+general_pauli_gadget_hi_pass = CustomPass(transform_pauli_exp_box_circuit)

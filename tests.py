@@ -3,7 +3,7 @@ from glob import glob
 from phase_gadget_pass import get_phase_gadget, phase_gadget_hi_pass
 from pauli_gadget_pass import (
     get_pauli_gadget,
-    pauli_gadget_hi_pass,
+    single_pauli_gadget_hi_pass,
 )
 
 # _partition_pauli_gadget,
@@ -26,7 +26,7 @@ def compare_phase_and_pauli_unitaries() -> None:
     u1_phase = circ_phase.get_unitary()
     u1_pauli = circ_pauli.get_unitary()
     phase_gadget_hi_pass.apply(circ_phase)
-    pauli_gadget_hi_pass.apply(circ_pauli)
+    single_pauli_gadget_hi_pass.apply(circ_pauli)
     # view_browser(circ1)
     # view_browser(circ2)
     assert compare_unitaries(circ_phase.get_unitary(), circ_pauli.get_unitary())
@@ -39,12 +39,12 @@ def test_specific_pauli_gadget_circuits() -> None:
     pauli_xyyz = get_pauli_gadget("XYYZ", 0.65)
 
     u1_yz = pauli_yz.get_unitary()
-    pauli_gadget_hi_pass.apply(pauli_yz)
+    single_pauli_gadget_hi_pass.apply(pauli_yz)
     u2_yz = pauli_yz.get_unitary()
     assert compare_unitaries(u1_yz, u2_yz)
 
     u1_xyyz = pauli_xyyz.get_unitary()
-    pauli_gadget_hi_pass.apply(pauli_xyyz)
+    single_pauli_gadget_hi_pass.apply(pauli_xyyz)
     u2_xyyz = pauli_xyyz.get_unitary()
     assert compare_unitaries(u1_xyyz, u2_xyyz)
 
@@ -59,7 +59,7 @@ def test_depth1_pauli_gadget_qasm_circuits() -> None:
         #    view_browser(circ)
         u1 = pauli_circuit.get_unitary()
         # view_browser(pauli_circuit)
-        pauli_gadget_hi_pass.apply(pauli_circuit)
+        single_pauli_gadget_hi_pass.apply(pauli_circuit)
         u2 = pauli_circuit.get_unitary()
         # view_browser(pauli_circuit)
         assert compare_unitaries(u1, u2)
