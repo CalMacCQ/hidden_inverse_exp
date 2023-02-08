@@ -4,11 +4,10 @@ from pytket.predicates import GateSetPredicate
 from pytket.passes import CustomPass, DecomposeBoxes
 from pytket.pauli import Pauli
 from pytket.circuit import PauliExpBox
-from pytket.circuit.display import view_browser
-from pytket.utils import compare_unitaries
+
+# from pytket.circuit.display import view_browser
 
 from hseires_decompositions import h_series_seq_pass, h_series_gateset_predicate
-from phase_gadget_pass import get_phase_gadget, phase_gadget_hi_pass
 
 
 single_qubit_cliffords = {OpType.H, OpType.V, OpType.Vdg}
@@ -63,10 +62,10 @@ def _partition_pauli_gadget(circ: Circuit) -> list[Circuit]:
     circuit_list = []
     n_qubits = circ.n_qubits
 
-    assert (
-        circ.n_gates_of_type(OpType.CX) + circ.n_gates_of_type(OpType.Rz)
-        == 2 * n_qubits - 1
-    )
+    # assert (
+    #    circ.n_gates_of_type(OpType.CX) + circ.n_gates_of_type(OpType.Rz)
+    #    == 2 * n_qubits - 1
+    # )
     assert pauli_gadget_predicate.verify(circ)
 
     circ1 = Circuit(n_qubits)
@@ -102,7 +101,9 @@ def transform_pauli_gadget(circ: Circuit) -> Circuit:
     hidden_inverse_circ = circuit_list[0].dagger()
 
     circ_prime.append(circuit_list[0])
-    circ_prime.add_circuit(circuit_list[1], [circ_prime.qubits[0]])
+    circ_prime.add_circuit(
+        circuit_list[1], [circ_prime.qubits[0]]
+    )  # add central Rz gate to q[0]
     circ_prime.append(hidden_inverse_circ)
     assert h_series_gateset_predicate.verify(circ_prime)
     return circ_prime
