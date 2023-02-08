@@ -7,7 +7,7 @@ from pytket.circuit import PauliExpBox
 from pytket.pauli import Pauli
 from pytket.passes import (
     auto_rebase_pass,
-    PauliSimp,
+    # PauliSimp,
     RemoveRedundancies,
     DecomposeBoxes,
 )
@@ -49,7 +49,6 @@ def pauli_circ(n_qubits: int, depth: int, save_qasm=False) -> Circuit:
 
 c1 = pauli_circ(2, 1, True)
 c2 = pauli_circ(3, 1, True)
-c3 = pauli_circ(5, 1, True)
+
 view_browser(c1)
 view_browser(c2)
-view_browser(c3)

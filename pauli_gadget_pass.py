@@ -14,6 +14,7 @@ single_qubit_cliffords = {OpType.H, OpType.V, OpType.Vdg}
 pauli_gadget_predicate = GateSetPredicate(
     {OpType.Rz, OpType.CX} | single_qubit_cliffords
 )
+gadget_boxes = {OpType.PhasePolyBox, OpType.PauliExpBox}
 
 
 def _pauli_string_cutter(string: str) -> list[str]:
@@ -59,14 +60,10 @@ def _partition_pauli_gadget(circ: Circuit) -> list[Circuit]:
     after the central Rz gates returning a list of three circuits. The second circuit
     should just be a single Rz gate.
     """
+    assert pauli_gadget_predicate.verify(circ)
+
     circuit_list = []
     n_qubits = circ.n_qubits
-
-    # assert (
-    #    circ.n_gates_of_type(OpType.CX) + circ.n_gates_of_type(OpType.Rz)
-    #    == 2 * n_qubits - 1
-    # )
-    assert pauli_gadget_predicate.verify(circ)
 
     lhs_circ = Circuit(n_qubits)
     for cmd in circ.get_commands():
@@ -82,7 +79,7 @@ def _partition_pauli_gadget(circ: Circuit) -> list[Circuit]:
     rhs_circ = lhs_circ.dagger()
     circuit_list.append(rhs_circ)
 
-    # assert len(circuit_list) == 3
+    assert len(circuit_list) == 3
     return circuit_list
 
 
@@ -108,3 +105,18 @@ def transform_pauli_gadget(circ: Circuit) -> Circuit:
 
 
 pauli_gadget_hi_pass = CustomPass(transform_pauli_gadget)
+
+
+def transform_pauli_exp_box_circuit(circ: Circuit) -> Circuit:
+    circ_prime = Circuit(circ.n_qubits, name=circ.name)
+    for cmd in circ.get_commands():
+        if cmd not in gadget_boxes:
+            circ_prime.add_gate(cmd.op.type, cmd.op.params, cmd.qubits)
+        else:
+            box_circ = Circuit(len(cmd.qubits))
+            box_circ.add_gate(cmd.op.type, cmd.op.params, cmd.qubits)
+            DecomposeBoxes().apply(box_circ)
+            pauli_gadget_hi_pass.apply(box_circ)
+            circ_prime.append(box_circ)
+
+    return circ_prime

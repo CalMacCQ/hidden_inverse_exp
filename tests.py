@@ -4,8 +4,10 @@ from phase_gadget_pass import get_phase_gadget, phase_gadget_hi_pass
 from pauli_gadget_pass import (
     get_pauli_gadget,
     pauli_gadget_hi_pass,
-    _partition_pauli_gadget,
 )
+
+# _partition_pauli_gadget,
+# )
 from pytket.utils import compare_unitaries
 from pytket.qasm import circuit_from_qasm
 
@@ -13,7 +15,7 @@ PROJECT_FOLDER = os.path.dirname(os.path.abspath(__file__))
 CIRCUITS_FOLDER = f"{PROJECT_FOLDER}/qasm_circuits"
 circuit_files = glob(f"{CIRCUITS_FOLDER}/*.qasm")
 
-from pytket.circuit.display import view_browser
+# from pytket.circuit.display import view_browser
 
 # TODO write more tests - and better ones!
 
@@ -47,9 +49,7 @@ def test_specific_pauli_gadget_circuits() -> None:
     assert compare_unitaries(u1_xyyz, u2_xyyz)
 
 
-# TODO testing random Pauli gadget circuits should work - this is a bug
-# Circuits with a depth > 1 should also work.
-def test_random_pauli_gadget_qasm_circuits() -> None:
+def test_depth1_pauli_gadget_qasm_circuits() -> None:
     counter = 1
     for circuit_file in circuit_files:
         print(f"Testing circuit: ({counter}/{len(circuit_files)})", circuit_file)
@@ -69,5 +69,4 @@ def test_random_pauli_gadget_qasm_circuits() -> None:
 if __name__ == "__main__":
     compare_phase_and_pauli_unitaries()
     test_specific_pauli_gadget_circuits()
-    # test_random_pauli_gadget_qasm_circuits()
-    print("tests passed")
+    test_depth1_pauli_gadget_qasm_circuits()
