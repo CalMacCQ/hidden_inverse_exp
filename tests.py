@@ -1,8 +1,8 @@
 import os
 from glob import glob
-from phase_gadget_pass import get_phase_gadget, phase_gadget_hi_pass
+from utils.circuit_builders import get_phase_gadget, get_pauli_gadget
+from phase_gadget_pass import phase_gadget_hi_pass
 from pauli_gadget_pass import (
-    get_pauli_gadget,
     single_pauli_gadget_hi_pass,
 )
 from pytket import Circuit

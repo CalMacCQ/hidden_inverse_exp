@@ -2,7 +2,6 @@
 from pytket import Circuit, OpType
 from pytket.predicates import GateSetPredicate
 from pytket.passes import CustomPass, DecomposeBoxes
-from pytket.pauli import Pauli
 from pytket.circuit import PauliExpBox
 
 # from pytket.circuit.display import view_browser
@@ -15,45 +14,6 @@ pauli_gadget_predicate = GateSetPredicate(
     {OpType.Rz, OpType.CX} | single_qubit_cliffords
 )
 gadget_boxes = {OpType.PhasePolyBox, OpType.PauliExpBox}
-
-
-def _pauli_string_cutter(string: str) -> list[str]:
-    """Helper function: Given a string splits the string into a list where each of
-    the letters are an element of the list. 'XYZ' -> ['X', 'Y', 'Z']"""
-    string2 = string.upper()
-    mylist = []
-    for letter in string2:
-        assert letter in {"X", "Y", "Z", "I"}
-        mylist.append(letter)
-    return mylist
-
-
-def _create_pauli(letter: str) -> Pauli:
-    """
-    Helper function: Given a Pauli letter A returns a Pauli.A object.
-    """
-    assert len(letter) == 1
-    assert letter in {"X", "Y", "Z", "I"}
-    pauli_dict = {"X": Pauli.X, "Y": Pauli.Y, "Z": Pauli.Z, "I": Pauli.I}
-    return pauli_dict[letter]
-
-
-def get_pauli_gadget(pauli_word: str, angle: float, decompose=True) -> Circuit:
-    """
-    Returns a Pauli gadget circuit given a pauli word and an angle.
-    Optional flag to decompose the PauliExpBox or not (default=True).
-    """
-    n_qubits = len(pauli_word)
-    pauli_gadget_circ = Circuit(n_qubits)
-
-    list_of_letters = _pauli_string_cutter(pauli_word)
-    pauli_list = [_create_pauli(letter) for letter in list_of_letters]
-
-    pauli_exp_box = PauliExpBox(pauli_list, angle)
-    pauli_gadget_circ.add_pauliexpbox(pauli_exp_box, list(range(n_qubits)))
-    if decompose:
-        DecomposeBoxes().apply(pauli_gadget_circ)
-    return pauli_gadget_circ
 
 
 def _partition_pauli_gadget(circ: Circuit) -> list[Circuit]:

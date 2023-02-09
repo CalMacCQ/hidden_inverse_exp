@@ -1,28 +1,9 @@
 """Script to apply the Hidden inverse technique to Phase gadget circuits."""
 from pytket.circuit import Circuit, OpType
-from pytket.circuit.display import view_browser
+
+# from pytket.circuit.display import view_browser
 from pytket.passes import CustomPass
 from pytket.predicates import GateSetPredicate
-from pytket.utils import compare_unitaries
-
-
-def get_phase_gadget(rz_angle: float, n_qubits: int) -> Circuit:
-    """
-    Creates a phase gadget circuit for a given Rz angle and number of qubits.
-    """
-
-    assert n_qubits > 1
-    circ = Circuit(n_qubits)
-
-    for qubit in range(n_qubits - 1):
-        circ.CX(qubit, qubit + 1)
-
-    circ.Rz(rz_angle, n_qubits - 1)
-
-    for qubit in reversed(range(n_qubits - 1)):
-        circ.CX(qubit, qubit + 1)
-
-    return circ
 
 
 def compile_cx(circ: Circuit) -> Circuit:
