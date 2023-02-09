@@ -6,7 +6,7 @@ from pauli_gadget_pass import (
     single_pauli_gadget_hi_pass,
 )
 
-# _partition_pauli_gadget,
+# from pauli_gadget_pass import _partition_pauli_gadget,
 # )
 from pytket.utils import compare_unitaries
 from pytket.qasm import circuit_from_qasm

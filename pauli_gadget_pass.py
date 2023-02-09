@@ -38,9 +38,10 @@ def _create_pauli(letter: str) -> Pauli:
     return pauli_dict[letter]
 
 
-def get_pauli_gadget(pauli_word: str, angle: float) -> Circuit:
+def get_pauli_gadget(pauli_word: str, angle: float, decompose=True) -> Circuit:
     """
     Returns a Pauli gadget circuit given a pauli word and an angle.
+    Optional flag to decompose the PauliExpBox or not (default=True).
     """
     n_qubits = len(pauli_word)
     pauli_gadget_circ = Circuit(n_qubits)
@@ -50,7 +51,8 @@ def get_pauli_gadget(pauli_word: str, angle: float) -> Circuit:
 
     pauli_exp_box = PauliExpBox(pauli_list, angle)
     pauli_gadget_circ.add_pauliexpbox(pauli_exp_box, list(range(n_qubits)))
-    DecomposeBoxes().apply(pauli_gadget_circ)
+    if decompose:
+        DecomposeBoxes().apply(pauli_gadget_circ)
     return pauli_gadget_circ
 
 
@@ -115,13 +117,15 @@ def transform_pauli_exp_box_circuit(circ: Circuit) -> Circuit:
     """
     circ_prime = Circuit(circ.n_qubits, name=circ.name)
     for cmd in circ.get_commands():
-        if cmd not in gadget_boxes:
+        if cmd.op.type not in gadget_boxes:
             circ_prime.add_gate(cmd.op.type, cmd.op.params, cmd.qubits)
         else:
             box_circ = Circuit(len(cmd.qubits))
-            box_circ.add_gate(cmd.op.type, cmd.op.params, cmd.qubits)
+            pauli_list = cmd.op.get_paulis()
+            angle = cmd.op.get_phase()
+            p_exp_box = PauliExpBox(pauli_list, angle)
+            box_circ.add_pauliexpbox(p_exp_box, cmd.qubits)
             DecomposeBoxes().apply(box_circ)
-            # PauliSimp().apply(box_circ) ?
             single_pauli_gadget_hi_pass.apply(box_circ)
             circ_prime.add_circuit(box_circ, cmd.qubits)
 

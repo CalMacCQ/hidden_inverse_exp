@@ -25,17 +25,17 @@ def pauli_circ(n_qubits: int, depth: int, save_qasm=False) -> Circuit:
     qubit_list = [i for i in range(n_qubits)]
 
     for _ in range(depth):
-
         # Randomly reorder the qubits on which the gate will act, generate
         # random angle, and choose random Pauli string.
-        subset = np.random.permutation(qubit_list)
-        angle = np.random.uniform(-2, 2)
+        #subset = np.random.permutation(qubit_list)
+        subset = np.random.RandomState(seed=42).permutation(qubit_list)
+        #angle = np.random.uniform(-2, 2)
+        angle = 0.65
         random_pauli = np.random.choice(pauli_list, n_qubits)
 
         # Generate gate corresponding to pauli string and angle
         pauli_box = PauliExpBox(random_pauli, angle)
         c.add_pauliexpbox(pauli_box, subset)
-        DecomposeBoxes().apply(c)
 
         if save_qasm:
             circuit_to_qasm(c, f"pauli_gadget_q{n_qubits}_d{depth}.qasm")
@@ -45,10 +45,3 @@ def pauli_circ(n_qubits: int, depth: int, save_qasm=False) -> Circuit:
     # RemoveRedundancies().apply(c) # Remove consecutive Hadamards
 
     return c
-
-
-c1 = pauli_circ(2, 1, True)
-c2 = pauli_circ(3, 1, True)
-
-view_browser(c1)
-view_browser(c2)
