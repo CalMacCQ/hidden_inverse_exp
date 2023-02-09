@@ -100,3 +100,4 @@ if __name__ == "__main__":
     test_specific_pauli_gadget_circuits()
     test_depth1_pauli_gadget_qasm_circuits()
     test_alternating_cnot_decomposition()
+    print("tests passed")
