@@ -5,6 +5,8 @@ from pauli_gadget_pass import (
     get_pauli_gadget,
     single_pauli_gadget_hi_pass,
 )
+from pytket import Circuit
+from alternating_cnot_decomposition import hidden_inverse_alternating_cnots
 
 # from pauli_gadget_pass import _partition_pauli_gadget,
 # )
@@ -66,7 +68,35 @@ def test_depth1_pauli_gadget_qasm_circuits() -> None:
         counter += 1
 
 
+def test_alternating_cnot_decomposition():
+    circuit = (
+        Circuit(4)
+        .H(0)
+        .CX(0, 1)
+        .H(1)
+        .CX(1, 2)
+        .H(3)
+        .CX(2, 3)
+        .H(3)
+        .CX(0, 1)
+        .H(1)
+        .CX(1, 2)
+        .CX(0, 1)
+        .H(0)
+        .H(1)
+    )
+    u1 = circuit.get_unitary()
+    # view_browser(circuit)
+    hidden_inverse_alternating_cnots.apply(circuit)
+
+    u2 = circuit.get_unitary()
+    # view_browser(circuit)
+
+    assert compare_unitaries(u1, u2)
+
+
 if __name__ == "__main__":
     compare_phase_and_pauli_unitaries()
     test_specific_pauli_gadget_circuits()
     test_depth1_pauli_gadget_qasm_circuits()
+    test_alternating_cnot_decomposition()
