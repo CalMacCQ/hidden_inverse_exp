@@ -2,14 +2,14 @@ from pytket.backends.backendresult import BackendResult
 import matplotlib.pyplot as plt
 
 
-def plot_results(result: BackendResult, n_strings: int) -> None:
+def plot_results(result: BackendResult, n_strings=4) -> None:
     """
     Plots results in a barchart given a BackendResult. the number of stings displayed
     can be specified with the n_strings argument.
     """
     counts_dict = result.get_counts()
     sorted_shots = counts_dict.most_common()
-    n_shots = sum(counts_dict.values())
+    max_value = sorted_shots[0][1]
 
     n_most_common_strings = sorted_shots[:n_strings]
     x_axis_values = [str(entry[0]) for entry in n_most_common_strings]  # basis states
@@ -24,7 +24,7 @@ def plot_results(result: BackendResult, n_strings: int) -> None:
         color=color_list,
     )
     ax.set_title(label="Results")
-    plt.ylim([0, 0.5 * n_shots])
+    plt.ylim([0, 2 * max_value])
     plt.xlabel("Basis State")
     plt.ylabel("Number of Shots")
     plt.show()
