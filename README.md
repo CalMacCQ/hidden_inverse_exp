@@ -23,7 +23,7 @@ Here $M$ represents the unitary (and self-adjoint) matrix associated with a two 
 
 ## What does this repo contain? Hidden inverse passes targeting the H-Series gateset
 
-1. A method to quickly get the hidden inverse circuits for an two qubit gate with a hidden inverse. The H-Series gateset is used -> [here](https://github.com/CQCL/hidden_inverse_exp/blob/main/hseires_decompositions.py).
+1. A method to quickly get the hidden inverse circuits for an two qubit gate with a hidden inverse. The H-Series gateset is used -> [here](https://github.com/CQCL/hidden_inverse_exp/blob/main/hseries_decompositions.py).
 2. An "alernating CNOT decompostion" pass -> [here](https://github.com/CQCL/hidden_inverse_exp/blob/main/alternating_cnot_decomposition.py) that compiles every CNOT to the H-Series gateset and uses the hidden inverse decomposition if a CNOT uses the same two qubits as a previous CNOT. 
 3. A compilation pass to compile Pauli gadget circuits using the LHS and RHS decomposition of CNOT gates -> [here](https://github.com/CQCL/hidden_inverse_exp/blob/main/pauli_gadget_pass.py)
 4. A phase gadget pass (probably legacy) -> [here](https://github.com/CQCL/hidden_inverse_exp/blob/main/phase_gadget_pass.py) should be covered by (2.)

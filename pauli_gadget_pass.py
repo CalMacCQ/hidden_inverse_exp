@@ -6,7 +6,7 @@ from pytket.circuit import PauliExpBox
 
 # from pytket.circuit.display import view_browser
 
-from hseires_decompositions import h_series_seq_pass, h_series_gateset_predicate
+from hseries_decompositions import h_series_seq_pass, h_series_gateset_predicate
 
 
 single_qubit_cliffords = {OpType.H, OpType.V, OpType.Vdg}
