@@ -13,6 +13,7 @@ from pytket.passes import (
     auto_squash_pass,
 )
 from pytket.utils import compare_unitaries
+from typing import Tuple
 
 
 hseries_rebase = auto_rebase_pass({OpType.ZZPhase, OpType.Rz, OpType.PhasedX})
@@ -36,7 +37,7 @@ h_series_gateset_predicate = GateSetPredicate(
 h_series_gateset_predicate_1q = GateSetPredicate({OpType.Rz, OpType.PhasedX})
 
 # These functions are basically duplicates and should maybe be combined into one.
-def get_hidden_inverse_circuits_1q(unitary_1q: np.array) -> tuple([Circuit, Circuit]):
+def get_hidden_inverse_circuits_1q(unitary_1q: np.array) -> Tuple[Circuit, Circuit]:
     """
     Given a 1 qubit unitary A that is self-adjoint returns the decomposition of A as well as the
     decomposition of A^. Both decompositions are in the H-series gateset.
@@ -44,7 +45,7 @@ def get_hidden_inverse_circuits_1q(unitary_1q: np.array) -> tuple([Circuit, Circ
     assert unitary_1q.shape == (2, 2)
     assert np.allclose(
         unitary_1q, unitary_1q.conj().T
-    )  # assert that 2q unitary is self-adjoint
+    )  # assert that 1q unitary is self-adjoint
     u_box_1q = Unitary1qBox(unitary_1q)
     circ_1q = Circuit(1)
     circ_1q.add_unitary1qbox(u_box_1q, 0)
@@ -57,7 +58,7 @@ def get_hidden_inverse_circuits_1q(unitary_1q: np.array) -> tuple([Circuit, Circ
 
 # The function below should generate pairs of Hidden inverses for any two qubit unitary
 #  that is self-adjoint. The decompositions are given in the H-Series gateset.
-def get_hidden_inverse_circuits_2q(unitary_2q: np.array) -> tuple([Circuit, Circuit]):
+def get_hidden_inverse_circuits_2q(unitary_2q: np.array) -> Tuple[Circuit, Circuit]:
     """
     Given a 2 qubit unitary A that is self-adjoint returns the decomposition of A as well as the
     decomposition of A^. Both decompositions are in the H-series gateset.
