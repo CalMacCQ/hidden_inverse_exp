@@ -1,5 +1,5 @@
-# Hack month week 1: Hidden Inverse Circuits for Coherent Error Supression 
-
+# Hidden Inverse Circuits for Coherent Error Supression 
+### Hack month week 1
 **Key reference:** https://arxiv.org/abs/2104.01119
 
 **Idea:** Self adjoint gates such as CX have two equivalent decompositons into hardware native gates. Find symmetric circuits and use both decompostions to cancel coherent errors.
