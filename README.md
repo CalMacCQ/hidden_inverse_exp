@@ -1,4 +1,4 @@
-# Hidden Inverse Circuits for Coherent Error Supression 
+# Hack month week 1: Hidden Inverse Circuits for Coherent Error Supression 
 
 **Key reference:** https://arxiv.org/abs/2104.01119
 
