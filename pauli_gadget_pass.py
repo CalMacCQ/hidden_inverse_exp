@@ -75,16 +75,18 @@ def transform_pauli_exp_box_circuit(circ: Circuit) -> Circuit:
     and PhasePolyBox(es) returns a circuit with the Pauli gadgets
     implemented using the H-Series hidden inverse decompositions.
     """
-    circ_prime = Circuit(circ.n_qubits, name=circ.name)
+    circ_prime = Circuit(circ.n_qubits, circ.n_bits, name=circ.name)
     for cmd in circ.get_commands():
-        if cmd.op.type not in gadget_boxes:
+        if cmd.op.type == OpType.Measure:
+            circ_prime.Measure(cmd.args[0], cmd.args[1])
+        elif cmd.op.type not in gadget_boxes:
             circ_prime.add_gate(cmd.op.type, cmd.op.params, cmd.qubits)
         else:
             box_circ = Circuit(len(cmd.qubits))
             pauli_list = cmd.op.get_paulis()
             angle = cmd.op.get_phase()
             p_exp_box = PauliExpBox(pauli_list, angle)
-            box_circ.add_pauliexpbox(p_exp_box, cmd.qubits)
+            box_circ.add_pauliexpbox(p_exp_box, box_circ.qubits)
             DecomposeBoxes().apply(box_circ)
             single_pauli_gadget_hi_pass.apply(box_circ)
             circ_prime.add_circuit(box_circ, cmd.qubits)
