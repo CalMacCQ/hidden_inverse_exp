@@ -10,7 +10,12 @@ from .utils.circuit_builders import get_pauli_gadget, get_phase_gadget
 from .utils.random import generate_random_gadget
 
 
-from .hseries import get_hidden_inverse_circuits_1q, get_hidden_inverse_circuits_2q
+from .hseries import (
+    get_hidden_inverse_circuits_1q,
+    get_hidden_inverse_circuits_2q,
+    hseries_rebase,
+    hseries_squash,
+)
 
 __all__ = [
     "alternating_cnots_pass",
@@ -21,4 +26,6 @@ __all__ = [
     "get_pauli_gadget",
     "get_phase_gadget",
     "generate_random_gadget",
+    "hseries_rebase",
+    "hseries_squash",
 ]
