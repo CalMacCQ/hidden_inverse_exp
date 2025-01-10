@@ -1,7 +1,6 @@
 import numpy as np
 from pytket import Circuit
 
-# from pytket import OpType
 from pytket.qasm import circuit_to_qasm
 from pytket.circuit import PauliExpBox
 from pytket.pauli import Pauli
@@ -10,7 +9,7 @@ from pytket.pauli import Pauli
 pauli_list = [Pauli.X, Pauli.Y, Pauli.X, Pauli.I]
 
 
-def pauli_circ(n_qubits: int, depth: int, save_qasm=False) -> Circuit:
+def generate_random_gadget(n_qubits: int, depth: int, save_qasm=False) -> Circuit:
 
     c = Circuit(n_qubits)
 
@@ -31,9 +30,5 @@ def pauli_circ(n_qubits: int, depth: int, save_qasm=False) -> Circuit:
 
         if save_qasm:
             circuit_to_qasm(c, f"pauli_gadget_q{n_qubits}_d{depth}.qasm")
-
-    # PauliSimp(cx_config=CXConfigType.Tree).apply(c)
-    # auto_rebase_pass({OpType.CZ, OpType.H, OpType.Rz, OpType.Rx}).apply(c)
-    # RemoveRedundancies().apply(c) # Remove consecutive Hadamards
 
     return c
