@@ -6,7 +6,7 @@ from pytket.circuit import PauliExpBox
 from pytket.pauli import Pauli
 
 
-pauli_list = [Pauli.X, Pauli.Y, Pauli.X, Pauli.I]
+pauli_list = [Pauli.X, Pauli.Y, Pauli.Z, Pauli.I]
 
 
 def generate_random_gadget(n_qubits: int, depth: int, save_qasm=False) -> Circuit:
